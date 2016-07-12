@@ -5,7 +5,7 @@ if [[ "$*" == npm*start* ]]; then
     # Explicitly copy all themes separately to ensure the "casper" theme is
     # always available
     baseDir="$GHOST_SOURCE/content"
-    echo $baseDir
+
     for dir in "$baseDir"/*/ "$baseDir"/themes/*/; do
         targetDir="$GHOST_CONTENT/${dir#$baseDir/}"
         mkdir -p "$targetDir"
@@ -15,10 +15,17 @@ if [[ "$*" == npm*start* ]]; then
     done
 
     if [ ! -e "$GHOST_CONTENT/config.js" ]; then
-        cp "$GHOST_SOURCE/config.js" "$GHOST_CONTENT/config.js"
+        sed -r '
+            s/127\.0\.0\.1/0.0.0.0/g;
+            s!path.join\(__dirname, (.)/content!path.join(process.env.GHOST_CONTENT, \1!g;
+        ' "$GHOST_SOURCE/config.example.js" > "$GHOST_CONTENT/config.js"
     fi
 
     ln -sf "$GHOST_CONTENT/config.js" "$GHOST_SOURCE/config.js"
+
+    chown -R app "$GHOST_CONTENT"
+
+    set -- su-exec app "$@"
 fi
 
 exec "$@"
