@@ -15,7 +15,7 @@ RUN chmod 755 /build.sh
 RUN /build.sh
 
 COPY ./entrypoint.sh /
-ENTRYPOINT [ "/entrypoint.sh" ]
+ENTRYPOINT [ "/sbin/tini", "--", "/entrypoint.sh" ]
 
 EXPOSE 2368
 CMD [ "npm", "start" ]
