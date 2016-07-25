@@ -2,8 +2,6 @@
 set -e
 
 if [[ "$*" == npm*start* ]]; then
-    # Explicitly copy all themes separately to ensure the "casper" theme is
-    # always available
     baseDir="$GHOST_SOURCE/content"
 
     for dir in "$baseDir"/*/ "$baseDir"/themes/*/; do
@@ -21,9 +19,13 @@ if [[ "$*" == npm*start* ]]; then
         ' "$GHOST_SOURCE/config.example.js" > "$GHOST_CONTENT/config.js"
     fi
 
-    ln -sf "$GHOST_CONTENT/config.js" "$GHOST_SOURCE/config.js"
+    if [ ! -e "$GHOST_SOURCE/config.js" ]; then
+        ln -sf "$GHOST_CONTENT/config.js" "$GHOST_SOURCE/config.js"
+    fi
 
     chown -R app "$GHOST_CONTENT"
+    # Required for production mode
+    chown -R app "$GHOST_SOURCE/content"
 
     set -- su-exec app "$@"
 fi
