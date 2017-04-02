@@ -5,7 +5,7 @@ RUN addgroup app && adduser -D -G app -s /bin/false app
 
 ENV GHOST_SOURCE /usr/src/app
 ENV GHOST_CONTENT /var/lib/ghost
-ENV GHOST_VERSION 0.9.0
+ENV GHOST_VERSION 0.11.7
 
 WORKDIR $GHOST_SOURCE
 VOLUME $GHOST_CONTENT

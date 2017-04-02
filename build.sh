@@ -6,7 +6,7 @@ apk update
 
 mkdir -p "$GHOST_CONTENT"
 
-# TODO: Remove bash -- need to rewrite the entrypoint to be POSIX-compliance
+# TODO: Remove bash -- need to rewrite the entrypoint to be POSIX-compliant
 apk --no-cache add tar tini bash su-exec
 apk --no-cache add --virtual devs gcc make python wget unzip ca-certificates
 
